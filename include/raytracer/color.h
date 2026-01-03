@@ -5,6 +5,10 @@
 
 #include <raytracer/vec3.h>
 
-void color_write(FILE *fp, const struct vec3 *color);
+typedef vec3_t color_t;
+
+color_t color_create(double r, double g, double b);
+
+void color_write(FILE *fp, const color_t *color);
 
 #endif // COLOR_H

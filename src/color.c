@@ -3,16 +3,20 @@
 #include <raytracer/color.h>
 #include <raytracer/vec3.h>
 
-void color_write(FILE *fp, const struct vec3 *color)
+color_t color_create(double r, double g, double b)
 {
-	double r = color->x;
-	double g = color->y;
-	double b = color->z;
+	// Do this to use vec3 ops for point
+	vec3_t v = vec3_create(r, g, b);
+	color_t *c = (color_t *)&v;
+	return *c;
+}
 
+void color_write(FILE *fp, const color_t *color)
+{
 	// Translate the [0,1] component values to the byte range [0,255].
-	int rbyte = (int)(255.999 * r);
-	int gbyte = (int)(255.999 * g);
-	int bbyte = (int)(255.999 * b);
+	int rbyte = (int)(255.999 * color->x);
+	int gbyte = (int)(255.999 * color->y);
+	int bbyte = (int)(255.999 * color->z);
 
 	// Write out the pixel color components.
 	fprintf(fp, "%d %d %d\n", rbyte, gbyte, bbyte);
