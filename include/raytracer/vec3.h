@@ -1,6 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include <stdio.h>
+
 struct vec3 {
 	union {
 		double e[3];
@@ -21,12 +23,12 @@ void vec3_add(struct vec3 *v, const struct vec3 *a);
 void vec3_multiply(struct vec3 *v, double t);
 void vec3_divide(struct vec3 *v, double t);
 
-// Unary immutable operations
+// Properties
 double vec3_length(const struct vec3 *v);
 double vec3_length_squared(const struct vec3 *v);
 struct vec3 vec3_unit(const struct vec3 *v);
 
-void vec3_str(const struct vec3 *v, char *buf);
+void vec3_write(FILE *fp, const struct vec3 *v);
 
 // Binary immutable operations
 struct vec3 vec3_negate(struct vec3 v);

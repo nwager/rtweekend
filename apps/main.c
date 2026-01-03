@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <raytracer/vec3.h>
+#include <raytracer/color.h>
+
 int main()
 {
 	// Image
@@ -19,15 +22,12 @@ int main()
 		printf("\rScanlines remaining: %d ", image_height - j);
 		fflush(stdout);
 		for (int i = 0; i < image_width; i++) {
-			double r = (double)i / (image_width - 1);
-			double g = (double)j / (image_height - 1);
-			double b = 0.0;
+			struct vec3 pixel_color = vec3_create(
+					(double)i / (image_width - 1),
+					(double)j / (image_height - 1),
+					0.0);
 
-			int ir = (int)(255.999 * r);
-			int ig = (int)(255.999 * g);
-			int ib = (int)(255.999 * b);
-
-			fprintf(fp, "%d %d %d\n", ir, ig, ib);
+			color_write(fp, &pixel_color);
 		}
 	}
 

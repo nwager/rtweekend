@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdio.h>
 
 #include <raytracer/vec3.h>
 
@@ -59,9 +58,9 @@ struct vec3 vec3_unit(const struct vec3 *v)
 	return vec3_scalar(1.0/vec3_length(v), *v);
 }
 
-void vec3_str(const struct vec3 *v, char *buf)
+void vec3_write(FILE *fp, const struct vec3 *v)
 {
-	sprintf(buf, "%lf %lf %lf", v->e[0], v->e[1], v->e[2]);
+	fprintf(fp, "%lf %lf %lf\n", v->e[0], v->e[1], v->e[2]);
 }
 
 // Binary immutable operations
