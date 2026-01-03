@@ -1,16 +1,32 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include <raytracer/vec3.h>
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
 
+bool hit_sphere(const point3_t *center, double radius, const struct ray *r)
+{
+	vec3_t oc = vec3_difference(*center, r->orig);
+	double a = vec3_dot(r->dir,  r->dir);
+	double b = -2.0 * vec3_dot(r->dir, oc);
+	double c = vec3_dot(oc, oc) - (radius*radius);
+	double discriminant = b*b - 4*a*c;
+	return discriminant >= 0;
+}
+
 color_t ray_color(const struct ray *r)
 {
+	const point3_t sphere_center = point3_create(0, 0, -1);
+	if (hit_sphere(&sphere_center, 0.5, r)) {
+		return vec3_create(1.0, 0.0, 0.0);
+	}
+
 	vec3_t unit_direction = vec3_unit(&r->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
-	color_t start_color = vec3_create(1.0, 1.0, 1.0);
-	color_t end_color = vec3_create(0.5, 0.7, 1.0);
+	color_t start_color = color_create(1.0, 1.0, 1.0);
+	color_t end_color = color_create(0.5, 0.7, 1.0);
 	return vec3_sum(vec3_mscalar(start_color, 1.0 - a), vec3_mscalar(end_color, a));
 }
 
@@ -32,7 +48,7 @@ int main()
 	const double focal_length = 1.0;
 	const double viewport_height = 2.0;
 	const double viewport_width = viewport_height * (double)image_width / image_height;
-	const point3_t camera_center = vec3_create(0, 0, 0);
+	const point3_t camera_center = point3_create(0, 0, 0);
 
 	// Calculate the vectors across the horizontal and down the vertical viewport edges.
 	const vec3_t viewport_u = vec3_create(viewport_width, 0, 0);

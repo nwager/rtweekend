@@ -5,10 +5,7 @@
 
 color_t color_create(double r, double g, double b)
 {
-	// Do this to use vec3 ops for point
-	vec3_t v = vec3_create(r, g, b);
-	color_t *c = (color_t *)&v;
-	return *c;
+	return vec3_create(r, g, b);
 }
 
 void color_write(FILE *fp, const color_t *color)

@@ -17,6 +17,7 @@ typedef vec3_t point3_t;
 // Initialization
 vec3_t vec3_zero();
 vec3_t vec3_create(double e0, double e1, double e2);
+point3_t point3_create(double e0, double e1, double e2);
 
 // In-place operations
 void vec3_add(vec3_t *v, const vec3_t *a);

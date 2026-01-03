@@ -14,6 +14,11 @@ vec3_t vec3_create(double e0, double e1, double e2)
 	return (vec3_t){ .e = {e0, e1, e2} };
 }
 
+point3_t point3_create(double e0, double e1, double e2)
+{
+	return vec3_create(e0, e1, e2);
+}
+
 // In-place operations
 
 vec3_t vec3_negate(vec3_t v)
