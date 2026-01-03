@@ -1,0 +1,6 @@
+# cmake build artifacts
+/build/
+/.cache/
+
+# IDE
+/compile_commands.json
