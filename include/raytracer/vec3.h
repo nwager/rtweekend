@@ -20,6 +20,7 @@ struct vec3 vec3_create(double e0, double e1, double e2);
 
 // In-place operations
 void vec3_add(struct vec3 *v, const struct vec3 *a);
+void vec3_subtract(struct vec3 *v, const struct vec3 *a);
 void vec3_multiply(struct vec3 *v, double t);
 void vec3_divide(struct vec3 *v, double t);
 
@@ -36,6 +37,7 @@ struct vec3 vec3_sum(struct vec3 u, struct vec3 v);
 struct vec3 vec3_difference(struct vec3 u, struct vec3 v);
 double vec3_dot(struct vec3 u, struct vec3 v);
 struct vec3 vec3_cross(struct vec3 u, struct vec3 v);
-struct vec3 vec3_scalar(double t, struct vec3 v);
+struct vec3 vec3_mscalar(struct vec3 v, double t);
+struct vec3 vec3_dscalar(struct vec3 v, double t);
 
 #endif // VEC3_H

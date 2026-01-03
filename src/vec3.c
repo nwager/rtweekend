@@ -28,6 +28,13 @@ void vec3_add(struct vec3 *v, const struct vec3 *a)
 	v->e[2] += a->e[2];
 }
 
+void vec3_subtract(struct vec3 *v, const struct vec3 *a)
+{
+	v->e[0] -= a->e[0];
+	v->e[1] -= a->e[1];
+	v->e[2] -= a->e[2];
+}
+
 void vec3_multiply(struct vec3 *v, double t)
 {
 	v->e[0] *= t;
@@ -55,7 +62,7 @@ double vec3_length_squared(const struct vec3 *v)
 
 struct vec3 vec3_unit(const struct vec3 *v)
 {
-	return vec3_scalar(1.0/vec3_length(v), *v);
+	return vec3_dscalar(*v, vec3_length(v));
 }
 
 void vec3_write(FILE *fp, const struct vec3 *v)
@@ -76,7 +83,7 @@ struct vec3 vec3_sum(struct vec3 u, struct vec3 v)
 
 struct vec3 vec3_difference(struct vec3 u, struct vec3 v)
 {
-	return vec3_sum(u, vec3_scalar(-1.0, v));
+	return vec3_sum(u, vec3_mscalar(v, -1.0));
 }
 
 double vec3_dot(struct vec3 u, struct vec3 v)
@@ -93,8 +100,14 @@ struct vec3 vec3_cross(struct vec3 u, struct vec3 v)
 	);
 }
 
-struct vec3 vec3_scalar(double t, struct vec3 v)
+struct vec3 vec3_mscalar(struct vec3 v, double t)
 {
 	vec3_multiply(&v, t);
+	return v;
+}
+
+struct vec3 vec3_dscalar(struct vec3 v, double t)
+{
+	vec3_divide(&v, t);
 	return v;
 }

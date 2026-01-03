@@ -1,4 +1,7 @@
-#include "raytracer/color.h"
+#include <stdio.h>
+
+#include <raytracer/color.h>
+#include <raytracer/vec3.h>
 
 void color_write(FILE *fp, const struct vec3 *color)
 {
