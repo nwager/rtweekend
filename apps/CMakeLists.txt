@@ -1,0 +1,4 @@
+add_executable(main main.c)
+target_compile_features(main PRIVATE c_std_11)
+
+target_link_libraries(main PRIVATE vec3)
