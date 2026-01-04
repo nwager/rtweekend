@@ -1,26 +1,35 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include <raytracer/vec3.h>
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
 
-bool hit_sphere(const point3_t *center, double radius, const struct ray *r)
+double hit_sphere(const point3_t *center, double radius, const struct ray *r)
 {
 	vec3_t oc = vec3_difference(*center, r->orig);
-	double a = vec3_dot(r->dir,  r->dir);
-	double b = -2.0 * vec3_dot(r->dir, oc);
-	double c = vec3_dot(oc, oc) - (radius*radius);
-	double discriminant = b*b - 4*a*c;
-	return discriminant >= 0;
+	double a = vec3_length_squared(&r->dir);
+	double h = vec3_dot(r->dir, oc);
+	double c = vec3_length_squared(&oc) - (radius*radius);
+	double discriminant = h*h - a*c;
+
+	if (discriminant < 0) {
+		return -1.0;
+	} else {
+		return (h - sqrt(discriminant)) / a;
+	}
 }
 
 color_t ray_color(const struct ray *r)
 {
 	const point3_t sphere_center = point3_create(0, 0, -1);
-	if (hit_sphere(&sphere_center, 0.5, r)) {
-		return vec3_create(1.0, 0.0, 0.0);
+	double t = hit_sphere(&sphere_center, 0.5, r);
+	if (t > 0.0) {
+		vec3_t normal = vec3_difference(ray_at(r, t), vec3_create(0, 0, -1));
+		normal = vec3_unit(&normal);
+		return vec3_mscalar(color_create(normal.x+1, normal.y+1, normal.z+1), 0.5);
 	}
 
 	vec3_t unit_direction = vec3_unit(&r->dir);
