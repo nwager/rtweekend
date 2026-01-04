@@ -1,38 +1,25 @@
+#include "raytracer/hittable_list.h"
+#include "raytracer/sphere.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <math.h>
 
+#include <raytracer/raytracer.h>
 #include <raytracer/vec3.h>
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
 #include <raytracer/hittable.h>
 
-double hit_sphere(const point3_t center, double radius, const struct ray *r)
+color_t ray_color(const struct ray *r, const struct hittable *world)
 {
-	vec3_t oc = vec3_difference(center, r->orig);
-	double a = vec3_length_squared(r->dir);
-	double h = vec3_dot(r->dir, oc);
-	double c = vec3_length_squared(oc) - (radius*radius);
-	double discriminant = h*h - a*c;
-
-	if (discriminant < 0) {
-		return -1.0;
-	} else {
-		return (h - sqrt(discriminant)) / a;
-	}
-}
-
-color_t ray_color(const struct ray *r)
-{
-	const point3_t sphere_center = point3_create(0, 0, -1);
-	double t = hit_sphere(sphere_center, 0.5, r);
-	if (t > 0.0) {
-		vec3_t normal = vec3_difference(ray_at(r, t), vec3_create(0, 0, -1));
-		normal = vec3_unit(normal);
-		return vec3_mscalar(color_create(normal.x+1, normal.y+1, normal.z+1), 0.5);
+	// Render object if hit
+	struct hit_record rec;
+	if (world->hit(r, 0, INFINITY, &rec, world->data)) {
+		return vec3_mscalar(vec3_sum(rec.normal, color_create(1,1,1)), 0.5);
 	}
 
+	// Render background
 	vec3_t unit_direction = vec3_unit(r->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
 	color_t start_color = color_create(1.0, 1.0, 1.0);
@@ -79,10 +66,26 @@ int main()
 			);
 
 	// File
+
 	FILE *fp;
 	fp = fopen(fname, "w");
 
+	// World
+	
+	// Sphere 0
+	struct sphere_data s0d = create_sphere_data(point3_create(0,0,-1), 0.5);
+	struct hittable s0 = create_sphere_hittable(&s0d);
+	// Sphere 1
+	struct sphere_data s1d = create_sphere_data(point3_create(0,-100.5,-1), 100);
+	struct hittable s1 = create_sphere_hittable(&s1d);
+
+	struct hittable *objects[] = { &s0, &s1 };
+
+	struct hittable_list_data world_data = create_hittable_list_data(objects, sizeof(objects) / sizeof(*objects));
+	struct hittable world = create_hittable_list_hittable(&world_data);
+
 	// Render
+
 	fprintf(fp, "P3\n%d %d\n255\n", image_width, image_height);
 
 	for (int j = 0; j < image_height; j++) {
@@ -98,7 +101,7 @@ int main()
 			vec3_t ray_direction = vec3_difference(pixel_center, camera_center);
 			struct ray r = ray_create(camera_center, ray_direction);
 
-			const color_t pixel_color = ray_color(&r);
+			const color_t pixel_color = ray_color(&r, &world);
 
 			color_write(fp, pixel_color);
 		}
