@@ -5,9 +5,9 @@
 #include <math.h>
 
 static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
-		struct hit_record *rec, void *data);
+		struct hit_record *rec, const void *data);
 
-struct sphere_data create_sphere_data(const point3_t center, double radius)
+struct sphere_data create_sphere_data(const point3_t center, const double radius)
 {
 	return (struct sphere_data){
 		.center = center,
@@ -23,15 +23,15 @@ struct hittable create_sphere_hittable(struct sphere_data * const d)
 	};
 }
 
-static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
-		struct hit_record *rec, void *data)
+static bool hit(const struct ray *r, const double ray_tmin, const double ray_tmax,
+		struct hit_record *rec, const void *data)
 {
-	struct sphere_data *s = (struct sphere_data *)data;
+	const struct sphere_data *s = (const struct sphere_data *)data;
 
 	vec3_t oc = vec3_difference(s->center, r->orig);
-	double a = vec3_length_squared(&r->dir);
+	double a = vec3_length_squared(r->dir);
 	double h = vec3_dot(r->dir, oc);
-	double c = vec3_length_squared(&oc) - (s->radius * s->radius);
+	double c = vec3_length_squared(oc) - (s->radius * s->radius);
 	double discriminant = h*h - a*c;
 
 	if (discriminant < 0)
@@ -51,7 +51,7 @@ static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
 	rec->p = ray_at(r, rec->t);
 	rec->normal = vec3_dscalar(vec3_difference(rec->p, s->center), s->radius);
 	vec3_t outward_normal = vec3_dscalar(vec3_difference(rec->p, s->center), s->radius);
-	hit_record_set_face_normal(rec, r, &outward_normal);
+	hit_record_set_face_normal(rec, r, outward_normal);
 
 	return true;
 }

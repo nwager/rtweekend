@@ -8,12 +8,12 @@
 #include <raytracer/ray.h>
 #include <raytracer/hittable.h>
 
-double hit_sphere(const point3_t *center, double radius, const struct ray *r)
+double hit_sphere(const point3_t center, double radius, const struct ray *r)
 {
-	vec3_t oc = vec3_difference(*center, r->orig);
-	double a = vec3_length_squared(&r->dir);
+	vec3_t oc = vec3_difference(center, r->orig);
+	double a = vec3_length_squared(r->dir);
 	double h = vec3_dot(r->dir, oc);
-	double c = vec3_length_squared(&oc) - (radius*radius);
+	double c = vec3_length_squared(oc) - (radius*radius);
 	double discriminant = h*h - a*c;
 
 	if (discriminant < 0) {
@@ -26,14 +26,14 @@ double hit_sphere(const point3_t *center, double radius, const struct ray *r)
 color_t ray_color(const struct ray *r)
 {
 	const point3_t sphere_center = point3_create(0, 0, -1);
-	double t = hit_sphere(&sphere_center, 0.5, r);
+	double t = hit_sphere(sphere_center, 0.5, r);
 	if (t > 0.0) {
 		vec3_t normal = vec3_difference(ray_at(r, t), vec3_create(0, 0, -1));
-		normal = vec3_unit(&normal);
+		normal = vec3_unit(normal);
 		return vec3_mscalar(color_create(normal.x+1, normal.y+1, normal.z+1), 0.5);
 	}
 
-	vec3_t unit_direction = vec3_unit(&r->dir);
+	vec3_t unit_direction = vec3_unit(r->dir);
 	double a = 0.5 * (unit_direction.y + 1.0);
 	color_t start_color = color_create(1.0, 1.0, 1.0);
 	color_t end_color = color_create(0.5, 0.7, 1.0);
@@ -92,15 +92,15 @@ int main()
 			const vec3_t du = vec3_mscalar(pixel_delta_u, i);
 			const vec3_t dv = vec3_mscalar(pixel_delta_v, j);
 			point3_t pixel_center = pixel00_loc;
-			vec3_add(&pixel_center, &du);
-			vec3_add(&pixel_center, &dv);
+			pixel_center = vec3_sum(pixel_center, du);
+			pixel_center = vec3_sum(pixel_center, dv);
 
 			vec3_t ray_direction = vec3_difference(pixel_center, camera_center);
 			struct ray r = ray_create(camera_center, ray_direction);
 
 			const color_t pixel_color = ray_color(&r);
 
-			color_write(fp, &pixel_color);
+			color_write(fp, pixel_color);
 		}
 	}
 

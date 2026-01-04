@@ -19,18 +19,12 @@ vec3_t vec3_zero();
 vec3_t vec3_create(double e0, double e1, double e2);
 point3_t point3_create(double e0, double e1, double e2);
 
-// In-place operations
-void vec3_add(vec3_t *v, const vec3_t *a);
-void vec3_subtract(vec3_t *v, const vec3_t *a);
-void vec3_multiply(vec3_t *v, double t);
-void vec3_divide(vec3_t *v, double t);
-
 // Properties
-double vec3_length(const vec3_t *v);
-double vec3_length_squared(const vec3_t *v);
-vec3_t vec3_unit(const vec3_t *v);
+double vec3_length(vec3_t v);
+double vec3_length_squared(vec3_t v);
+vec3_t vec3_unit(vec3_t v);
 
-void vec3_write(FILE *fp, const vec3_t *v);
+void vec3_write(FILE *fp, vec3_t v);
 
 // Immutable operations
 vec3_t vec3_neg(vec3_t v);

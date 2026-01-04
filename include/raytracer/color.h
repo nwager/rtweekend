@@ -9,6 +9,6 @@ typedef vec3_t color_t;
 
 color_t color_create(double r, double g, double b);
 
-void color_write(FILE *fp, const color_t *color);
+void color_write(FILE *fp, color_t color);
 
 #endif // COLOR_H
