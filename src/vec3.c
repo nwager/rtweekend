@@ -21,11 +21,6 @@ point3_t point3_create(double e0, double e1, double e2)
 
 // In-place operations
 
-vec3_t vec3_negate(vec3_t v)
-{
-	return vec3_create(-v.e[0], -v.e[1], -v.e[2]);
-}
-
 void vec3_add(vec3_t *v, const vec3_t *a)
 {
 	v->e[0] += a->e[0];
@@ -75,7 +70,13 @@ void vec3_write(FILE *fp, const vec3_t *v)
 	fprintf(fp, "%lf %lf %lf\n", v->e[0], v->e[1], v->e[2]);
 }
 
-// Binary immutable operations
+// Immutable operations
+
+vec3_t vec3_neg(vec3_t v)
+{
+	return vec3_create(-v.e[0], -v.e[1], -v.e[2]);
+}
+
 
 vec3_t vec3_sum(vec3_t u, vec3_t v)
 {

@@ -32,8 +32,8 @@ vec3_t vec3_unit(const vec3_t *v);
 
 void vec3_write(FILE *fp, const vec3_t *v);
 
-// Binary immutable operations
-vec3_t vec3_negate(vec3_t v);
+// Immutable operations
+vec3_t vec3_neg(vec3_t v);
 vec3_t vec3_sum(vec3_t u, vec3_t v);
 vec3_t vec3_difference(vec3_t u, vec3_t v);
 double vec3_dot(vec3_t u, vec3_t v);
