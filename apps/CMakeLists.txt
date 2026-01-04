@@ -7,6 +7,7 @@ target_link_libraries(main PRIVATE color)
 target_link_libraries(main PRIVATE ray)
 target_link_libraries(main PRIVATE sphere)
 target_link_libraries(main PRIVATE hittable)
+target_link_libraries(main PRIVATE hittable_list)
 
 # stdlibs
 target_link_libraries(main PRIVATE m)
