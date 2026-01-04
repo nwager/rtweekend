@@ -9,6 +9,7 @@ struct hit_record {
 	point3_t p;
 	vec3_t normal;
 	double t;
+	bool front_face;
 };
 
 // Abstract "class" for hittable objects.
@@ -18,5 +19,8 @@ struct hittable {
 	void *data; // Optional, generic data struct for hittable object
 		    // to be passed to hit()
 };
+
+void hit_record_set_face_normal(struct hit_record *rec, const struct ray *r,
+		const vec3_t *outward_normal);
 
 #endif // HITTABLE_H

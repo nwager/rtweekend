@@ -6,6 +6,7 @@
 #include <raytracer/vec3.h>
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
+#include <raytracer/hittable.h>
 
 double hit_sphere(const point3_t *center, double radius, const struct ray *r)
 {
