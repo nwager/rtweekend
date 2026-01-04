@@ -73,16 +73,16 @@ int main()
 	// World
 	
 	// Sphere 0
-	struct sphere_data s0d = create_sphere_data(point3_create(0,0,-1), 0.5);
-	struct hittable s0 = create_sphere_hittable(&s0d);
+	struct sphere_data s0d = sphere_create_data(point3_create(0,0,-1), 0.5);
+	struct hittable s0 = sphere_create_hittable(&s0d);
 	// Sphere 1
-	struct sphere_data s1d = create_sphere_data(point3_create(0,-100.5,-1), 100);
-	struct hittable s1 = create_sphere_hittable(&s1d);
+	struct sphere_data s1d = sphere_create_data(point3_create(0,-100.5,-1), 100);
+	struct hittable s1 = sphere_create_hittable(&s1d);
 
 	struct hittable *objects[] = { &s0, &s1 };
 
-	struct hittable_list_data world_data = create_hittable_list_data(objects, sizeof(objects) / sizeof(*objects));
-	struct hittable world = create_hittable_list_hittable(&world_data);
+	struct hittable_list_data world_data = hittable_list_create_data(objects, sizeof(objects) / sizeof(*objects));
+	struct hittable world = hittable_list_create_hittable(&world_data);
 
 	// Render
 

@@ -6,7 +6,7 @@
 static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
 		struct hit_record *rec, const void *data);
 
-struct hittable_list_data create_hittable_list_data(struct hittable * *const objects,
+struct hittable_list_data hittable_list_create_data(struct hittable * *const objects,
 		const int size)
 {
 	return (struct hittable_list_data){
@@ -15,7 +15,7 @@ struct hittable_list_data create_hittable_list_data(struct hittable * *const obj
 	};
 }
 
-struct hittable create_hittable_list_hittable(struct hittable_list_data * const d)
+struct hittable hittable_list_create_hittable(struct hittable_list_data * const d)
 {
 	return (struct hittable){
 		.hit = hit,

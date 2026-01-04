@@ -8,7 +8,7 @@ struct sphere_data {
 	double radius;
 };
 
-struct sphere_data create_sphere_data(point3_t center, double radius);
-struct hittable create_sphere_hittable(struct sphere_data * const d);
+struct sphere_data sphere_create_data(point3_t center, double radius);
+struct hittable sphere_create_hittable(struct sphere_data * const d);
 
 #endif // SPHERE_H

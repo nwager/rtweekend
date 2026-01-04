@@ -7,7 +7,7 @@
 static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
 		struct hit_record *rec, const void *data);
 
-struct sphere_data create_sphere_data(const point3_t center, const double radius)
+struct sphere_data sphere_create_data(const point3_t center, const double radius)
 {
 	return (struct sphere_data){
 		.center = center,
@@ -15,7 +15,7 @@ struct sphere_data create_sphere_data(const point3_t center, const double radius
 	};
 }
 
-struct hittable create_sphere_hittable(struct sphere_data * const d)
+struct hittable sphere_create_hittable(struct sphere_data * const d)
 {
 	return (struct hittable){
 		.hit = hit,
