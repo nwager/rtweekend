@@ -12,7 +12,18 @@ struct hit_record {
 	bool front_face;
 };
 
-// Abstract "class" for hittable objects.
+/**
+ * Abstract "class" for hittable objects.
+ *
+ * The pattern I've come up with is that each implementation of hittable can
+ * specify a data struct that will get passed in to the hit function. I add
+ * helper functions to create the data (caller-managed memory), and also a
+ * helper function to create the actual hittable instance. For example:
+ *
+ * struct object_data {...};
+ * struct object_data object_create_data(...);
+ * struct hittable object_create_hittable(struct object_data * const d);
+ */
 struct hittable {
 	bool (*hit)(const struct ray *r, double ray_tmin, double ray_tmax,
 			struct hit_record *rec, const void *data);
