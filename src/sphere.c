@@ -4,8 +4,9 @@
 #include <raytracer/sphere.h>
 #include <raytracer/hittable.h>
 #include <raytracer/vec3.h>
+#include <raytracer/interval.h>
 
-static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
+static bool hit(const struct ray *r, struct interval ray_t,
 		struct hit_record *rec, const void *data);
 
 struct sphere_data sphere_create_data(const point3_t center, const double radius)
@@ -24,7 +25,7 @@ struct hittable sphere_create_hittable(struct sphere_data * const d)
 	};
 }
 
-static bool hit(const struct ray *r, const double ray_tmin, const double ray_tmax,
+static bool hit(const struct ray *r, struct interval ray_t,
 		struct hit_record *rec, const void *data)
 {
 	const struct sphere_data *s = (const struct sphere_data *)data;
@@ -42,9 +43,9 @@ static bool hit(const struct ray *r, const double ray_tmin, const double ray_tma
 
 	// Find the nearest root that lies in the acceptable range.
 	double root = (h - sqrtd) / a;
-	if (root <= ray_tmin || ray_tmax <= root) {
+	if (!interval_surrounds(ray_t, root)) {
 		root = (h + sqrtd) / a;
-		if (root <= ray_tmin || ray_tmax <= root)
+		if (!interval_surrounds(ray_t, root))
 			return false;
 	}
 

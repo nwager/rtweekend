@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include <raytracer/ray.h>
+#include <raytracer/interval.h>
 
 struct hit_record {
 	point3_t p;
@@ -25,7 +26,7 @@ struct hit_record {
  * struct hittable object_create_hittable(struct object_data * const d);
  */
 struct hittable {
-	bool (*hit)(const struct ray *r, double ray_tmin, double ray_tmax,
+	bool (*hit)(const struct ray *r, struct interval ray_t,
 			struct hit_record *rec, const void *data);
 	void *data; // Optional, generic data struct for hittable object
 		    // to be passed to hit()

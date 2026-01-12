@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <math.h>
+#include <float.h>
 
 #include <raytracer/raytracer.h>
 #include <raytracer/vec3.h>
@@ -10,12 +10,13 @@
 #include <raytracer/hittable.h>
 #include <raytracer/hittable_list.h>
 #include <raytracer/sphere.h>
+#include <raytracer/interval.h>
 
 color_t ray_color(const struct ray *r, const struct hittable *world)
 {
 	// Render object if hit
 	struct hit_record rec;
-	if (world->hit(r, 0, INFINITY, &rec, world->data)) {
+	if (world->hit(r, interval_create(0, DBL_MAX), &rec, world->data)) {
 		return vec3_mscalar(vec3_sum(rec.normal, color_create(1,1,1)), 0.5);
 	}
 
