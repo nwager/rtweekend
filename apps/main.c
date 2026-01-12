@@ -13,7 +13,17 @@
 #include <raytracer/interval.h>
 
 // Prototypes
+int usage(int argc, char **argv);
 color_t ray_color(const struct ray *r, const struct hittable *world);
+
+int usage(int argc, char **argv)
+{
+	if (argc != 2) {
+		printf("USAGE: %s <output_file>\n", argv[0]);
+		return -1;
+	}
+	return 0;
+}
 
 color_t ray_color(const struct ray *r, const struct hittable *world)
 {
@@ -31,10 +41,14 @@ color_t ray_color(const struct ray *r, const struct hittable *world)
 	return vec3_sum(vec3_mscalar(start_color, 1.0 - a), vec3_mscalar(end_color, a));
 }
 
-int main()
+int main(int argc, char **argv)
 {
+	int ret = usage(argc, argv);
+	if (ret)
+		return ret;
+
 	// Image
-	const char fname[] = "image.ppm";
+	const char *fname = argv[1];
 
 	const double aspect_ratio = 16.0 / 9.0;
 	const int image_width = 400;
@@ -73,6 +87,10 @@ int main()
 
 	FILE *fp;
 	fp = fopen(fname, "w");
+	if (!fp) {
+		printf("ERROR: Could not open file '%s'\n", fname);
+		return -1;
+	}
 
 	// World
 	
