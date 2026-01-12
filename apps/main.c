@@ -12,6 +12,9 @@
 #include <raytracer/sphere.h>
 #include <raytracer/interval.h>
 
+// Prototypes
+color_t ray_color(const struct ray *r, const struct hittable *world);
+
 color_t ray_color(const struct ray *r, const struct hittable *world)
 {
 	// Render object if hit
