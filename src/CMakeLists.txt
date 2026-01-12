@@ -6,29 +6,21 @@ set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME_LOWER}")
 # Optionally glob, but only for CMake 3.12 or later:
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${INCLUDE_DIR}/*.h")
 
-# Make an automatic library - will be static or dynamic based on user setting
-add_library(vec3 vec3.c ${HEADER_LIST})
-add_library(color color.c ${HEADER_LIST})
-add_library(ray ray.c ${HEADER_LIST})
-add_library(sphere sphere.c ${HEADER_LIST})
-add_library(hittable hittable.c ${HEADER_LIST})
-add_library(hittable_list hittable_list.c ${HEADER_LIST})
+function(new_library lib_name)
+	# Make an automatic library - will be static or dynamic based on user setting
+	add_library(${lib_name} ${ARGN})
+	# We need this directory, and users of our library will need it too
+	target_include_directories(${lib_name} PUBLIC ../include)
+	# Pick C11 just because
+	target_compile_features(${lib_name} PUBLIC c_std_11)
+endfunction()
 
-# We need this directory, and users of our library will need it too
-target_include_directories(vec3 PUBLIC ../include)
-target_include_directories(color PUBLIC ../include)
-target_include_directories(ray PUBLIC ../include)
-target_include_directories(sphere PUBLIC ../include)
-target_include_directories(hittable PUBLIC ../include)
-target_include_directories(hittable_list PUBLIC ../include)
-
-# Pick C11 just because
-target_compile_features(vec3 PUBLIC c_std_11)
-target_compile_features(color PUBLIC c_std_11)
-target_compile_features(ray PUBLIC c_std_11)
-target_compile_features(sphere PUBLIC c_std_11)
-target_compile_features(hittable PUBLIC c_std_11)
-target_compile_features(hittable_list PUBLIC c_std_11)
+new_library(vec3 vec3.c "${HEADER_LIST}")
+new_library(color color.c "${HEADER_LIST}")
+new_library(ray ray.c "${HEADER_LIST}")
+new_library(sphere sphere.c "${HEADER_LIST}")
+new_library(hittable hittable.c "${HEADER_LIST}")
+new_library(hittable_list hittable_list.c "${HEADER_LIST}")
 
 # IDEs should put the headers in a nice place
 source_group(
