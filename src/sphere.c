@@ -1,8 +1,9 @@
+#include <stdbool.h>
+#include <math.h>
+
 #include <raytracer/sphere.h>
 #include <raytracer/hittable.h>
 #include <raytracer/vec3.h>
-#include <stdbool.h>
-#include <math.h>
 
 static bool hit(const struct ray *r, double ray_tmin, double ray_tmax,
 		struct hit_record *rec, const void *data);

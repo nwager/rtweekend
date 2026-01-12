@@ -1,5 +1,3 @@
-#include "raytracer/hittable_list.h"
-#include "raytracer/sphere.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
@@ -10,6 +8,8 @@
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
 #include <raytracer/hittable.h>
+#include <raytracer/hittable_list.h>
+#include <raytracer/sphere.h>
 
 color_t ray_color(const struct ray *r, const struct hittable *world)
 {
