@@ -5,6 +5,7 @@
 #include <raytracer/hittable.h>
 #include <raytracer/vec3.h>
 #include <raytracer/interval.h>
+#include <raytracer/ray.h>
 
 static bool hit(const struct ray *r, struct interval ray_t,
 		struct hit_record *rec, const void *data);
