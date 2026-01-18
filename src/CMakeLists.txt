@@ -21,6 +21,7 @@ new_library(ray ray.c "${HEADER_LIST}")
 new_library(sphere sphere.c "${HEADER_LIST}")
 new_library(hittable hittable.c "${HEADER_LIST}")
 new_library(hittable_list hittable_list.c "${HEADER_LIST}")
+new_library(camera camera.c "${HEADER_LIST}")
 
 # IDEs should put the headers in a nice place
 source_group(
