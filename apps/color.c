@@ -2,6 +2,7 @@
 
 #include <raytracer/color.h>
 #include <raytracer/vec3.h>
+#include <raytracer/interval.h>
 
 color_t color_create(double r, double g, double b)
 {
@@ -11,9 +12,10 @@ color_t color_create(double r, double g, double b)
 void color_write(FILE *fp, const color_t color)
 {
 	// Translate the [0,1] component values to the byte range [0,255].
-	int rbyte = (int)(255.999 * color.x);
-	int gbyte = (int)(255.999 * color.y);
-	int bbyte = (int)(255.999 * color.z);
+	const struct interval intensity = interval_create(0, 0.999);
+	int rbyte = (int)(256 * interval_clamp(intensity, color.x));
+	int gbyte = (int)(256 * interval_clamp(intensity, color.y));
+	int bbyte = (int)(256 * interval_clamp(intensity, color.z));
 
 	// Write out the pixel color components.
 	fprintf(fp, "%d %d %d\n", rbyte, gbyte, bbyte);

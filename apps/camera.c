@@ -6,14 +6,21 @@
 #include <raytracer/vec3.h>
 #include <raytracer/color.h>
 #include <raytracer/ray.h>
+#include <raytracer/raytracer.h>
 
+static struct ray get_ray(const struct camera *c, int i, int j);
+static vec3_t sample_square();
 static color_t ray_color(const struct ray *r, const struct hittable *world);
 
-void camera_initialize(struct camera *c, double aspect_ratio, int image_width)
+void camera_initialize(struct camera *c, double aspect_ratio, int image_width,
+		int samples_per_pixel)
 {
-	// Calculate the image height, and ensure that it's at least 1.
 	c->image_width = image_width;
 	c->aspect_ratio = aspect_ratio;
+	c->samples_per_pixel = samples_per_pixel;
+	c->pixel_samples_scale = 1.0 / samples_per_pixel;
+
+	// Calculate the image height, and ensure that it's at least 1.
 	c->image_height = (int)(c->image_width / c->aspect_ratio);
 	c->image_height = (c->image_height < 1) ? 1 : c->image_height;
 
@@ -49,22 +56,39 @@ void camera_render(const struct camera *c, const struct hittable *world, FILE *f
 		printf("\rScanlines remaining: %d ", c->image_height - j);
 		fflush(stdout);
 		for (int i = 0; i < c->image_width; i++) {
-			const vec3_t du = vec3_mscalar(c->pixel_delta_u, i);
-			const vec3_t dv = vec3_mscalar(c->pixel_delta_v, j);
-			point3_t pixel_center = c->pixel00_loc;
-			pixel_center = vec3_sum(pixel_center, du);
-			pixel_center = vec3_sum(pixel_center, dv);
-
-			vec3_t ray_direction = vec3_difference(pixel_center, c->center);
-			struct ray r = ray_create(c->center, ray_direction);
-
-			const color_t pixel_color = ray_color(&r, world);
-
+			color_t pixel_color = color_create(0, 0, 0);
+			for (int sample = 0; sample < c->samples_per_pixel; sample++) {
+				struct ray r = get_ray(c, i, j);
+				pixel_color = vec3_sum(pixel_color, ray_color(&r, world));
+			}
 			color_write(fp, pixel_color);
 		}
 	}
 
 	printf("\rDone.                 \n");
+}
+
+static struct ray get_ray(const struct camera *c, int i, int j)
+{
+	// Construct a camera ray originating from the origin and directed at a
+	// randomly sampled point around pixel location (i, j).
+
+	vec3_t offset = sample_square();
+	point3_t pixel_sample = c->pixel00_loc;
+	pixel_sample = vec3_sum(pixel_sample, vec3_mscalar(c->pixel_delta_u, i + offset.x));
+	pixel_sample = vec3_sum(pixel_sample, vec3_mscalar(c->pixel_delta_v, j + offset.y));
+
+	point3_t ray_origin = c->center;
+	vec3_t ray_direction = vec3_difference(pixel_sample, ray_origin);
+
+	return ray_create(ray_origin, ray_direction);
+}
+
+static vec3_t sample_square()
+{
+	// Returns the vector to a random point in the [-0.5.-0.5]-[+0.5,+0.5]
+	// unit square.
+	return vec3_create(random_double() - 0.5, random_double() - 0.5, 0);
 }
 
 static color_t ray_color(const struct ray *r, const struct hittable *world)

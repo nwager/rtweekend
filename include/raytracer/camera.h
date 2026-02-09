@@ -14,9 +14,12 @@ struct camera {
 	double aspect_ratio;
 	int image_width;
 	int image_height;
+	int samples_per_pixel;
+	double pixel_samples_scale;
 };
 
-void camera_initialize(struct camera *c, double aspect_ratio, int image_width);
+void camera_initialize(struct camera *c, double aspect_ratio, int image_width,
+		int samples_per_pixel);
 void camera_render(const struct camera *c, const struct hittable *world, FILE *fp);
 
 #endif // CAMERA_H

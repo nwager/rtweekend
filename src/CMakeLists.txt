@@ -15,14 +15,6 @@ function(new_library lib_name)
 	target_compile_features(${lib_name} PUBLIC c_std_11)
 endfunction()
 
-new_library(vec3 vec3.c "${HEADER_LIST}")
-new_library(color color.c "${HEADER_LIST}")
-new_library(ray ray.c "${HEADER_LIST}")
-new_library(sphere sphere.c "${HEADER_LIST}")
-new_library(hittable hittable.c "${HEADER_LIST}")
-new_library(hittable_list hittable_list.c "${HEADER_LIST}")
-new_library(camera camera.c "${HEADER_LIST}")
-
 # IDEs should put the headers in a nice place
 source_group(
   TREE "${PROJECT_SOURCE_DIR}/include"

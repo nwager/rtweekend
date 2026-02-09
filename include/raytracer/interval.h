@@ -28,6 +28,13 @@ static inline bool interval_surrounds(struct interval i, double x)
 	return i.min < x && x < i.max;
 }
 
+static inline double interval_clamp(struct interval i, double x)
+{
+	if (x < i.min) return i.min;
+	if (x > i.max) return i.max;
+	return x;
+}
+
 static const struct interval EMPTY = { DBL_MAX, DBL_MIN };
 static const struct interval UNIVERSE = { DBL_MIN, DBL_MAX };
 

@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
 	// Camera
 	struct camera cam;
-	camera_initialize(&cam, 16.0/9.0, 400);
+	camera_initialize(&cam, 16.0/9.0, 400, 100);
 
 	camera_render(&cam, &world, fp);
 
